@@ -4,7 +4,10 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
 
-  resources :playlists, param: :slug
+  resources :playlists do
+    resources :playlist_songs, only: [:index, :create, :destroy]
+  end
+
   resources :songs
-  resources :playlist_songs
+  
 end
