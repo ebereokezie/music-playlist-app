@@ -1,13 +1,11 @@
 import React, {useState, useEffect} from 'react'
-// import Home from './Home'
+import {Route, Routes} from 'react-router-dom'
+import Home from './Home'
 import Login from './Login';
-// import Signup from './Signup'
-// import Songs from './Songs'
-
-// import PlaylistSong from './PlaylistSong'
-// import UserPlaylists from './UserPlaylists'
-// import {Route, Switch} from 'react-router-dom'
+import Songs from './Songs'
+import UserPlaylists from './UserPlaylists'
 import './App.css';
+import NavigationBar from './NavigationBar';
 
 function App() {
   const [user, setUser] = useState('');
@@ -21,11 +19,16 @@ function App() {
     });
   }, []);
 
-  if (!user) return <Login onLogin={setUser} />;
+  // if (!user) return <Login onLogin={setUser} />;
 
   return (
     <div>
-      <Login />
+      <NavigationBar setUser = {setUser}/>
+      <Routes>
+      <Route exact path="/" element ={<Home  />} />
+      <Route exact path="/myplaylists" element ={<UserPlaylists />} />
+      <Route exact path="/songs" element ={<Songs  />} />
+   </Routes>
     </div>
   );
 }
