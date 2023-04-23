@@ -19,11 +19,11 @@ function App() {
     });
   }, []);
 
-  // if (!user) return <Login onLogin={setUser} />;
+  if (!user) return <Login onLogin={setUser} />;
 
   return (
     <div>
-      <NavigationBar setUser = {setUser}/>
+      <NavigationBar sx={{ backgroundColor: '#2196f3' }} setUser = {setUser}/>
       <Routes>
       <Route exact path="/" element ={<Home  />} />
       <Route exact path="/myplaylists" element ={<UserPlaylists />} />
