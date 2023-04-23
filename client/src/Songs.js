@@ -56,7 +56,6 @@ function Songs() {
                 {filteredSongs.map((song)=> (
                     <Grid item key={song.id} xs={12} sm={6} md={4}>
                         <Card>
-                            <CardActionArea>
                                 <CardMedia
                                     component="img"
                                     height="140"
@@ -73,9 +72,8 @@ function Songs() {
                                         {song.album}
                                     </Typography>
                                 </CardContent>
-                            </CardActionArea>
                         </Card>
-                        </Grid>
+                    </Grid>
                 ))}
             </Grid>       
         </>
