@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
+import { useParams } from 'react-router-dom';
 import {
     Card,
-    CardActionArea,
     CardContent,
     CardMedia,
     Grid,
@@ -11,23 +11,25 @@ import {
 } from '@material-ui/core'
 
 
-function Songs() {
-    const [songs, setSongs] = useState([])
+function PlaylistDetails() {
+    const [playlistSongs, setPlaylistSongs] = useState({title: "", songs: []})
     const [searchTerm, setSearchTerm] = useState('')
     const [isLoading, setIsLoading] = useState(true);
 
+    const {id} = useParams()
+ 
     const handleSearchTermChange = (e) =>{
         setSearchTerm(e.target.value)
     }
 
 
     useEffect(() => {
-        fetch("/songs")
+        fetch(`/playlists/${id}`)
         .then((data) => {
             if (data.ok) {
                 setIsLoading(false);
                 data.json()
-                .then(data => setSongs(data))
+                .then(data => setPlaylistSongs(data))
             } else {
                 data.json()
                 .then((err) => console.log(err.errors))
@@ -35,14 +37,16 @@ function Songs() {
     })
 }, [])
 
-    const filteredSongs = songs.filter((song) =>
-    song.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    song.artist.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    song.album.toLowerCase().includes(searchTerm.toLowerCase())
+console.log(playlistSongs.songs)
+
+    const filteredPlaylistSongs = playlistSongs.songs.filter((playlistSong) =>
+    playlistSong.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    playlistSong.artist.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    playlistSong.album.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-    const allSongs = filteredSongs.map((song)=> (
-        <Grid item key={song.id} xs={12} sm={6} md={4}>
+    const allPlaylistSongs = filteredPlaylistSongs.map((playlistSong)=> (
+        <Grid item key={playlistSong.id} xs={12} sm={6} md={4}>
             <Card>
                     <CardMedia
                         component="img"
@@ -51,20 +55,20 @@ function Songs() {
                     />
                     <CardContent>
                         <Typography gutterBottom variant ="h5" component="h2">
-                            {song.title}
+                            {playlistSong.title}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            {song.artist}
+                            {playlistSong.artist}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            {song.album}
+                            {playlistSong.album}
                         </Typography>
                     </CardContent>
             </Card>
         </Grid>
     ))
 
-    const displaySongs = filteredSongs.length !== 0 ? <Grid container spacing ={3}> {allSongs} </Grid> : <Typography >{"We don't have that song...yet!"}</Typography>
+    const displayPlaylistSongs = filteredPlaylistSongs.length !== 0 ? <Grid container spacing ={3}> {allPlaylistSongs} </Grid> : <Typography >{"We don't have that song...yet!"}</Typography>
     return(
         <>
             <TextField
@@ -78,8 +82,11 @@ function Songs() {
                     },
                   }}
             />
+            <Typography variant="h4" component="h1" gutterBottom>
+                {playlistSongs.title}
+            </Typography>
             <>
-            {isLoading ? <div>{"Loading..."}</div> : displaySongs}
+            {isLoading ? <div>{"Loading..."}</div> : displayPlaylistSongs}
             </>
             
         </>
@@ -87,4 +94,4 @@ function Songs() {
     )
 }
 
-export default Songs;
+export default PlaylistDetails;

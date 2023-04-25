@@ -6,9 +6,11 @@ import Songs from './Songs'
 import UserPlaylists from './UserPlaylists'
 import './App.css';
 import NavigationBar from './NavigationBar';
+import PlaylistDetails from './PlaylistDetails'
 
 function App() {
   const [user, setUser] = useState('');
+  
 
   useEffect(() => {
     
@@ -28,6 +30,7 @@ function App() {
       <Route exact path="/" element ={<Home  />} />
       <Route exact path="/myplaylists" element ={<UserPlaylists />} />
       <Route exact path="/songs" element ={<Songs  />} />
+      <Route exact path="/myplaylists/:id" element = {<PlaylistDetails />} />
    </Routes>
     </div>
   );

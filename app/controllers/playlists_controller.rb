@@ -9,6 +9,12 @@ class PlaylistsController < ApplicationController
 
     end
 
+    def show
+        playlist = Playlist.find_by_id(params[:id])
+        
+        render json: playlist
+      end
+
     def create
         user = User.find(session[:user_id])
         playlist = user.playlist.create(playlist_params)
