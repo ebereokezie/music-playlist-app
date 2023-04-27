@@ -4,15 +4,15 @@ class PlaylistSongsController < ApplicationController
         playlist = Playlist.find_by_id(params[:id])
 
         playlist_songs = playlist.playlist_songs
-
+P
         render json: playlist_songs
 
     end
 
     def create
-        playlist = Playlist.find_by_id(params[:id])
+        playlist = Playlist.find(params[:playlist_id])
 
-        playlist_song = playlist.playlist_song.create(playlist_song_params)
+        playlist_song = playlist.playlist_songs.create(playlist_song_params)
 
         if playlist_song.valid?
            render json: playlist_song, status: :created
@@ -25,7 +25,7 @@ class PlaylistSongsController < ApplicationController
 
     def destroy
         playlist = Playlist.find_by_id(params[:id])
-        playlist_song = playlist.playlist_song.find_by_id(params[:id])
+        playlist_song = playlist.playlist_songs.find_by_id(params[:id])
 
         if playlist_song
             playlist_song.destroy
@@ -40,7 +40,7 @@ class PlaylistSongsController < ApplicationController
     private
 
     def playlist_song_params
-        params.permit(:song_id)
+        params.require(:playlist_song).permit(:song_id, :playlist_id)
     end
 
 

@@ -17,7 +17,7 @@ class PlaylistsController < ApplicationController
 
     def create
         user = User.find(session[:user_id])
-        playlist = user.playlist.create(playlist_params)
+        playlist = user.playlists.create(playlist_params)
 
         if playlist.valid?
             render json: playlist, status: :created

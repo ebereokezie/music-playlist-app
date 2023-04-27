@@ -16,7 +16,7 @@ function Songs() {
     const [searchTerm, setSearchTerm] = useState('')
     const [isLoading, setIsLoading] = useState(true);
     const [playlists, setPlaylists] = useState([])
-    const [playlistId, setPlaylistId] = useState(null)
+    const [playlistIds, setPlaylistIds] = useState([]);
 
     const handleSearchTermChange = (e) =>{
         setSearchTerm(e.target.value)
@@ -57,24 +57,32 @@ useEffect(() => {
     song.album.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-    function handlePlaylistSelect(e){
-        setPlaylistId(e.target.value)
-    }
+    function handlePlaylistSelect(e, index){
+        const newPlaylistIds = {...playlistIds}
 
-    function handleAddToPlaylist(){
-        if (playlistId){
-            fetch(`/playlists/${playlistId}/playlist_songs`, {
+        newPlaylistIds[index] = e.target.value;
+        setPlaylistIds(newPlaylistIds);
+};
+        //setPlaylistId(e.target.value)
+    //}
+
+    function handleAddToPlaylist(song, index){
+        if (playlistIds[index]){
+            fetch(`/playlists/${playlistIds[index]}/playlist_songs`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ song_id: songs.id})
+                body: JSON.stringify({ 
+                    song_id: song.id,
+                    playlist_id: playlistIds[index]
+                })
                 
             })
             .then((data) => {
                 if (data.ok) {
                     data.json()
-                    .then((data) => setPlaylists(data))
+                    .then((data) => setPlaylists([...playlists, data]))
                 }
                 else {
                     data.json()
@@ -85,7 +93,7 @@ useEffect(() => {
         }
     }
 
-    const allSongs = filteredSongs.map((song)=> (
+    const allSongs = filteredSongs.map((song, index)=> (
         <Grid item key={song.id} xs={12} sm={6} md={4}>
             <Card>
                     <CardMedia
@@ -104,7 +112,7 @@ useEffect(() => {
                             {song.album}
                         </Typography>
                     </CardContent>
-                    <select value = {playlistId} onChange = {handlePlaylistSelect}>
+                    <select value = {playlistIds[index]} onChange = {handlePlaylistSelect}>
                         <option>Select a Playlist</option>
                             {playlists.map((playlist) => (
                                 <option value ={playlist.id}>
@@ -112,7 +120,7 @@ useEffect(() => {
                                 </option>
                             ))}
                     </select>
-                    <Button  sx = {{marginTop: 3, borderRadius: 3}} onClick = {handleAddToPlaylist} variant = 'contained' color = "secondary">Add to Playlist</Button>
+                    <Button  sx = {{marginTop: 3, borderRadius: 3}} onClick = {() => handleAddToPlaylist(song, playlistIds[index])} variant = 'contained' color = "secondary">Add to Playlist</Button>
             </Card>
         </Grid>
     ))
