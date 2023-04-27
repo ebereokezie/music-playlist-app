@@ -9,6 +9,7 @@ import {
     Typography,
     Button
 } from '@material-ui/core'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 
 function PlaylistDetails() {
@@ -37,6 +38,29 @@ function PlaylistDetails() {
     })
 }, [])
 
+function handleDeleteClick(song){
+   
+        fetch(`/playlists/${id}/playlist_songs/${song.id}`, {
+            method: "DELETE"
+        }).then((data)=> {
+            if (data.ok) {
+                const updatedSongs = playlistSongs.songs.filter(playlistSong => playlistSong.id !== song.id);
+           
+                const updatedPlaylist = {
+                ...playlistSongs,
+                songs: updatedSongs
+            };
+            setPlaylistSongs(updatedPlaylist);
+            }
+            else {
+                data.json()
+                .then((err) => console.log(err.errors))
+            }
+        })
+    }
+
+
+
 console.log(playlistSongs.songs)
 
     const filteredPlaylistSongs = playlistSongs.songs.filter((playlistSong) =>
@@ -64,6 +88,9 @@ console.log(playlistSongs.songs)
                             {playlistSong.album}
                         </Typography>
                     </CardContent>
+                    <Button onClick ={() => handleDeleteClick(playlistSong)}>
+                        <DeleteIcon />
+                    </Button>
             </Card>
         </Grid>
     ))

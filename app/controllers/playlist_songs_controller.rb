@@ -24,8 +24,8 @@ P
     end
 
     def destroy
-        playlist = Playlist.find_by_id(params[:id])
-        playlist_song = playlist.playlist_songs.find_by_id(params[:id])
+        playlist = Playlist.find(params[:playlist_id])
+        playlist_song = playlist.playlist_songs.find_by(song_id: params[:id])
 
         if playlist_song
             playlist_song.destroy
