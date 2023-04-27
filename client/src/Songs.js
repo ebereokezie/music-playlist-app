@@ -63,8 +63,7 @@ useEffect(() => {
         newPlaylistIds[index] = e.target.value;
         setPlaylistIds(newPlaylistIds);
 };
-        //setPlaylistId(e.target.value)
-    //}
+    
 
     function handleAddToPlaylist(song, index){
         if (playlistIds[index]){
