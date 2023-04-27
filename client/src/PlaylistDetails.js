@@ -61,7 +61,7 @@ function handleDeleteClick(song){
 
 
 
-console.log(playlistSongs.songs)
+
 
     const filteredPlaylistSongs = playlistSongs.songs.filter((playlistSong) =>
     playlistSong.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

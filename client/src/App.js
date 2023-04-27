@@ -7,6 +7,7 @@ import UserPlaylists from './UserPlaylists'
 import './App.css';
 import NavigationBar from './NavigationBar';
 import PlaylistDetails from './PlaylistDetails'
+import AddNewPlaylist from './AddNewPlaylist';
 
 function App() {
   const [user, setUser] = useState('');
@@ -31,6 +32,7 @@ function App() {
       <Route exact path="/myplaylists" element ={<UserPlaylists />} />
       <Route exact path="/songs" element ={<Songs  />} />
       <Route exact path="/myplaylists/:id" element = {<PlaylistDetails />} />
+      <Route exact path="/addplaylist" element = {<AddNewPlaylist />} />
    </Routes>
     </div>
   );
