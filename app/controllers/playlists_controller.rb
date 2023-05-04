@@ -1,4 +1,5 @@
 class PlaylistsController < ApplicationController
+    
 
     def index
         user = User.find(session[:user_id])
@@ -20,9 +21,14 @@ class PlaylistsController < ApplicationController
         playlist = user.playlists.create(playlist_params)
 
         if playlist.valid?
+            
+            if params[:image].present?
+                playlist.image.attach(params[:image])
+            end
+            
             render json: playlist, status: :created
-        else
-            render json: {errors: playlist.errors.full_messages}, status: :unprocessable_entity
+            else
+             render json: {errors: playlist.errors.full_messages}, status: :unprocessable_entity
         end
 
     end
@@ -61,6 +67,7 @@ class PlaylistsController < ApplicationController
     private
 
     def playlist_params
-        params.require(:playlist).permit(:title)
+        params.permit(:title, :image)
     end
+
 end

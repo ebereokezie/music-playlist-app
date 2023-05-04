@@ -1,4 +1,5 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useContext} from 'react'
+import { PlaylistContext } from './Contexts/PlaylistContext';
 import {Link} from "react-router-dom"
 import {
     Card,
@@ -26,14 +27,14 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function UserPlaylists() {
-    const [playlists, setPlaylists] = useState([])
+    const {playlists, setPlaylists, isLoading, setIsLoading} = useContext(PlaylistContext)
     const [searchTerm, setSearchTerm] = useState('')
-    const [isLoading, setIsLoading] = useState(true);
     const [editPlaylist, setEditPlaylist] = useState(false)
     const [playlistId, setPlaylistId] = useState([]);
 
     const classes = useStyles();
 
+    console.log(playlists)
     const handleSearchTermChange = (e) =>{
         setSearchTerm(e.target.value)
     }
@@ -43,19 +44,7 @@ function UserPlaylists() {
         setEditPlaylist(!editPlaylist)
 };
 
-    useEffect(() => {
-        fetch("/playlists")
-        .then((data) => {
-            if (data.ok) {
-                setIsLoading(false);
-                data.json()
-                .then(data => setPlaylists(data))
-            } else {
-                data.json()
-                .then((err) => console.log(err.errors))
-            }
-    })
-}, [])
+
 
 function handleDeleteClick(deletedPlaylist){
    
@@ -86,7 +75,7 @@ function handleUpdatedPlaylist(updatePlaylist) {
   }
     const filteredPlaylists = playlists.filter((playlist) =>
     playlist.title.toLowerCase().includes(searchTerm.toLowerCase()) 
-    )
+    ) 
 
     const myPlaylists = filteredPlaylists.map((playlist)=> (
         <Grid item key={playlist.id} xs={12} sm={6} md={4}>
@@ -95,7 +84,7 @@ function handleUpdatedPlaylist(updatePlaylist) {
                     <CardMedia
                         component="img"
                         height="140"
-                        image= "https://cdn-icons-png.flaticon.com/512/3844/3844724.png"
+                        image= {playlist.image_url}
                     />
                 </CardActionArea>
                     <CardContent>
@@ -140,7 +129,8 @@ function handleUpdatedPlaylist(updatePlaylist) {
                     },
                   }}
             />
-            
+            <Typography variant ="h4" padding ={3} textAlign = "center">My Playlists</Typography>
+            <Typography variant ="h6" padding ={3} textAlign = "center">Instructions: Click on the playlists to see what songs you've added!</Typography>
                {isLoading ? <div>{"Loading..."}</div> : displayPlaylists}
                   
         </>

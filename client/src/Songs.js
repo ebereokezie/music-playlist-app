@@ -1,4 +1,5 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useContext} from 'react'
+import { PlaylistContext } from './Contexts/PlaylistContext';
 import {
     Card,
     CardActionArea,
@@ -12,10 +13,9 @@ import {
 
 
 function Songs() {
+    const {playlists, setPlaylists, isLoading, setIsLoading} = useContext(PlaylistContext)
     const [songs, setSongs] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
-    const [isLoading, setIsLoading] = useState(true);
-    const [playlists, setPlaylists] = useState([])
     const [playlistIds, setPlaylistIds] = useState([]);
 
     const handleSearchTermChange = (e) =>{
@@ -81,7 +81,21 @@ useEffect(() => {
             .then((data) => {
                 if (data.ok) {
                     data.json()
-                    .then((data) => setPlaylists([...playlists, data]))
+                    .then((data) => {
+                        console.log(data)
+                        setPlaylists((prevPlaylists) => {
+                            const updatedPlaylists = prevPlaylists.map((playlist) => {
+                              if (playlist.id === playlistIds[index]) {
+                                return {
+                                  ...playlist,
+                                  playlist_songs: [...playlist.playlist_songs, data],
+                                };
+                              }
+                              return playlist;
+                            });
+                            return updatedPlaylists;
+                          });
+                        });
                 }
                 else {
                     data.json()
@@ -92,6 +106,7 @@ useEffect(() => {
         }
     }
 
+    console.log(playlists)
     const allSongs = filteredSongs.map((song, index)=> (
         <Grid item key={song.id} xs={12} sm={6} md={4}>
             <Card>
@@ -139,6 +154,8 @@ useEffect(() => {
                     },
                   }}
             />
+            <Typography variant ="h4" padding ={3} textAlign = "center">Song Library</Typography>
+            <Typography variant ="h6" padding ={3} textAlign = "center">Instructions: Using the dropdown, add the songs to your own unique playlists!</Typography>
             <>
             {isLoading ? <div>{"Loading..."}</div> : displaySongs}
             </>

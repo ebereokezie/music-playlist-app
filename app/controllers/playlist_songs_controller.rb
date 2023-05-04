@@ -4,7 +4,7 @@ class PlaylistSongsController < ApplicationController
         playlist = Playlist.find_by_id(params[:id])
 
         playlist_songs = playlist.playlist_songs
-P
+
         render json: playlist_songs
 
     end

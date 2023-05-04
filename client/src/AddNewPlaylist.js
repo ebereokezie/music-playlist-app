@@ -1,37 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { PlaylistContext } from './Contexts/PlaylistContext';
 import { Box, Button, TextField, Typography } from "@mui/material"
 
 function AddNewPlaylist() {
   const [newPlaylistTitle, setNewPlaylistTitle] = useState("");
+  const [newPlaylistImage, setNewPlaylistImage] = useState(null)
   const [errors, setErrors] = useState([]);
   const [visible, setVisible] = useState(false)
-  const [playlists, setPlaylists] = useState([])
+  const {playlists, setPlaylists} = useContext(PlaylistContext)
 
-  useEffect(() => {
-    fetch("/playlists")
-    .then((data) => {
-        if (data.ok) {
-            data.json()
-            .then(data => setPlaylists(data))
-        } else {
-            data.json()
-            .then((err) => console.log(err.errors))
-        }
-})
-}, [])
 
   function handleSubmit(e) {
     e.preventDefault();
     setErrors([]);
+    const formData = new FormData();
+    formData.append("title", newPlaylistTitle);
+    formData.append("image", newPlaylistImage);
     fetch("/playlists", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title: newPlaylistTitle }),
+      body: formData,
     }).then((data) => {
       if (data.ok) {
-        data.json().then((data) => setPlaylists([...playlists, data]));
+        data.json().then((data) =>
+        {
+        setPlaylists([...playlists, data]);
+        setNewPlaylistTitle("");
+        setNewPlaylistImage(null)}
+        );
       } else {
         data.json().then((err) => setErrors(err.errors));
       }
@@ -81,6 +76,10 @@ function AddNewPlaylist() {
                         placeholder='title' 
                         value={newPlaylistTitle}
                         onChange={(e) => setNewPlaylistTitle(e.target.value)}/>
+                        <h4>Choose an Image as your playlist cover</h4>
+                    <input type="file" onChange={(e) => setNewPlaylistImage(e.target.files[0])} />
+                            
+                    
                     <Button 
                         sx = {{marginTop: 3, borderRadius: 3}} 
                         variant = 'contained' 

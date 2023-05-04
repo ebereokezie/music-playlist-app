@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { UserContext } from './Contexts/UserContext';
 import {AppBar, Toolbar, IconButton, Typography, Button } from "@mui/material"
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import { NavLink } from "react-router-dom";
 
 
-function NavigationBar({ setUser}){
+function NavigationBar(){
 
-
+const {setUser} = useContext(UserContext)
 
     const linkStyles = {
         display: "inline",
