@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {Route, Routes} from 'react-router-dom'
+import { UserContext } from './Contexts/UserContext';
 import Home from './Home'
 import Login from './Login';
 import Songs from './Songs'
@@ -13,19 +14,17 @@ import { PlaylistContextProvider } from './Contexts/PlaylistContext';
 
 function App() {
 
-  
-
   return (
     <UserContextProvider>
       <PlaylistContextProvider>
       <NavigationBar sx={{ backgroundColor: '#2196f3' }} />
       <Routes>
-        <Route exact path="/" element ={<Home  />} />
+        <Route exact path="/home" element ={<Home  />} />
         <Route exact path="/myplaylists" element ={<UserPlaylists />} />
         <Route exact path="/songs" element ={<Songs  />} />
         <Route exact path="/myplaylists/:id" element = {<PlaylistDetails />} />
-        <Route exact path="/addplaylist" element = {<AddNewPlaylist />} />
-        <Route exact path="/login" element ={<Login />} />
+        <Route exact path="/myplaylists/add-new-playlist" element = {<AddNewPlaylist />} />
+      
       </Routes>
       </PlaylistContextProvider>
     </UserContextProvider>

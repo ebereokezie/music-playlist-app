@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { UserContext } from './Contexts/UserContext';
 import {AppBar, Toolbar, IconButton, Typography, Button } from "@mui/material"
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import {Link} from "react-router-dom"
 import { NavLink } from "react-router-dom";
 
 
@@ -29,6 +30,7 @@ const {setUser} = useContext(UserContext)
     function handleLogoutClick() {
         fetch("/logout", { method: "DELETE" }).then((r) => {
           if (r.ok) {
+            localStorage.clear()
             setUser(null);
           }
         });
@@ -43,11 +45,11 @@ const {setUser} = useContext(UserContext)
                     MUSIC LIBRARY APP
                 </Typography>
                 <Typography textAlign ='justify' variant = 'contained'>
-                    <NavLink to = "/" exact style = {linkStyles}>Home</NavLink>
+                    <NavLink to = "/home" exact style = {linkStyles}>Home</NavLink>
                     <NavLink to = "/myplaylists" exact style = {linkStyles}>My Playlists</NavLink>
                     <NavLink to = "/songs" exact style = {linkStyles}>Songs</NavLink>
                 </Typography>
-                <Button variant = 'contained' style={{color: "white"}} onClick={handleLogoutClick}>Log Out</Button>
+                <Button component={Link} to="/login" variant = 'contained' style={{color: "white"}} onClick={handleLogoutClick} >Log Out</Button>
             </Toolbar>
         </AppBar>
     )

@@ -1,5 +1,6 @@
 import React, {useState, useContext} from 'react';
 import { UserContext } from './Contexts/UserContext';
+import {Link} from "react-router-dom"
 import {  Button, Box} from "@mui/material"
 import LogInForm from "./LoginForm"
 import SignUpForm from "./SignUpForm"
@@ -15,7 +16,6 @@ function Login({onLogin}){
             <LogInForm onLogin ={onLogin} />
                 <Box textAlign = 'center'>
                     <Button 
-                   
                     sx = {{marginTop: 3, borderRadius: 3, textAlign: 'justify'}}onClick= {() => setShowLogin(false)}>
                     Sign Up
                     </Button>
@@ -27,7 +27,9 @@ function Login({onLogin}){
             <SignUpForm onLogin = {onLogin} />
                 <Box textAlign = 'center'>
                 
-                    <Button sx = {{marginTop: 3, borderRadius: 3}} onClick= {() => setShowLogin(true)}>
+                    <Button 
+
+                    sx = {{marginTop: 3, borderRadius: 3}} onClick= {() => setShowLogin(true)}>
                     Log In
                     </Button>
                 </Box>

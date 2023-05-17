@@ -4,20 +4,27 @@ const UserContext = createContext()
 
 function UserContextProvider({children}){
     const [user, setUser] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
   
 
     useEffect(() => {
-      
-      fetch("/me").then((data) => {
-        if (data.ok) {
-          data.json().then((user) => setUser(user));
-        }
-      });
+      setIsLoading(true)
+      fetch('/me')
+        .then((data) => {
+          if (data.ok) {
+            data.json().then((user) => {
+              setUser(user);
+              setIsLoading(false);
+            });
+          } else {
+            setIsLoading(false);
+          }
+        });
     }, []);
 
-    if (!user) return <Login onLogin = {setUser}/>;
+    if (!localStorage.getItem('user')) return <Login onLogin = {setUser}/>;
     return(
-        <UserContext.Provider value={{user, setUser}}>
+        <UserContext.Provider value={{user, setUser, isLoading}}>
             {children}
         </UserContext.Provider>
     )

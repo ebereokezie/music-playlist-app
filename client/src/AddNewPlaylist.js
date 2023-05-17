@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom"
 import { PlaylistContext } from './Contexts/PlaylistContext';
 import { Box, Button, TextField, Typography } from "@mui/material"
 
@@ -8,11 +9,18 @@ function AddNewPlaylist() {
   const [errors, setErrors] = useState([]);
   const [visible, setVisible] = useState(false)
   const {playlists, setPlaylists} = useContext(PlaylistContext)
+  const navigate = useNavigate();
 
 
   function handleSubmit(e) {
     e.preventDefault();
     setErrors([]);
+
+    if (!newPlaylistImage) {
+        setErrors(["Please choose an image for your playlist cover."]);
+        return;
+      }
+
     const formData = new FormData();
     formData.append("title", newPlaylistTitle);
     formData.append("image", newPlaylistImage);
@@ -25,7 +33,8 @@ function AddNewPlaylist() {
         {
         setPlaylists([...playlists, data]);
         setNewPlaylistTitle("");
-        setNewPlaylistImage(null)}
+        setNewPlaylistImage(null);
+        navigate("/myplaylists")}
         );
       } else {
         data.json().then((err) => setErrors(err.errors));

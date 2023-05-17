@@ -1,5 +1,6 @@
 import React, { useState, useContext} from 'react'
 import { PlaylistContext } from './Contexts/PlaylistContext';
+import { UserContext } from './Contexts/UserContext';
 import {Link} from "react-router-dom"
 import {
     Card,
@@ -27,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function UserPlaylists() {
-    const {playlists, setPlaylists, isLoading, setIsLoading} = useContext(PlaylistContext)
+    const {playlists, setPlaylists } = useContext(PlaylistContext)
+    const {isLoading} = useContext(UserContext)
     const [searchTerm, setSearchTerm] = useState('')
     const [editPlaylist, setEditPlaylist] = useState(false)
     const [playlistId, setPlaylistId] = useState([]);
@@ -111,7 +113,7 @@ function handleUpdatedPlaylist(updatePlaylist) {
         <>
          <Button 
             component={Link} 
-            to="/addplaylist" 
+            to="/myplaylists/add-new-playlist" 
             variant="contained" 
              color="primary" 
              className={classes.addPlaylistButton}

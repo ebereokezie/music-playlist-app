@@ -8,6 +8,7 @@ function PlaylistContextProvider({children}){
   
 
     useEffect(() => {
+        setIsLoading(true)
         fetch("/playlists")
         .then((data) => {
             if (data.ok) {

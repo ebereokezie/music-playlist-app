@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"
 import { Box, Button, TextField, Typography } from "@mui/material"
 
 function LoginForm({ onLogin }) {
@@ -7,6 +8,7 @@ function LoginForm({ onLogin }) {
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false)
+  const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -21,7 +23,10 @@ function LoginForm({ onLogin }) {
     }).then((data) => {
       setIsLoading(false);
       if (data.ok) {
-        data.json().then((user) => onLogin(user));
+        data.json().then((user) => {
+        localStorage.setItem('user', JSON.stringify(user)) 
+        onLogin(user);
+        navigate("/home")});
       } else {
         data.json().then((err) => setErrors(err.errors));
       }
